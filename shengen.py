@@ -1,12 +1,13 @@
 SHENGEN = 180
+
 #меню
 def menu():
     print('--------------------------')
     print('n - добавить новый визит')
-    print('r - удалить визит')
+    print('c - удалить визит')
     print('h - расчитать отдых')
     print('a - запланировать поездку')
-    print('w - прочитать список визитов из файла')
+    print('r - прочитать список визитов из файла')
     print('s - сохранить список визитов в файл')
     print('e - выход')
     print('--------------------------')
@@ -93,20 +94,23 @@ def future_visit(vis):
         else:
             print('Вам нужно будет выехать в {} день'.format(future + (residence_limit - all_days(vis)[-1])))
 
-#парсиннг файла визитов в переменную
-def write_visit(vis):
-    with open ('visits.txt', 'r') as v:
-        for line in v:
-            tmp = []
-            tmp.append(int(line.strip()))
-            tmp.append(int(v.readline().strip()))
-            vis.append(tmp)
+#создание списка визитов из файла
+def read_visit(vis):
+    try:
+        with open ('visits.txt', 'r') as v:
+            for line in v:
+                i = line.split()
+                i[0] = int(i[0])
+                i[1] = int(i[1])
+                vis.append(i)
+    except:
+        pass
 
 #сохранение списка визитов в файл
 def save_visit(vis):
     with open('visits.txt', 'w') as v:
         for visit in vis:
-            v.write('{}\n'.format(visit[0]))
+            v.write('{} '.format(visit[0]))
             v.write('{}\n'.format(visit[1]))
 
 print('Здравствуйте! Давайте расчитаем ваш отдых в ЕС')
@@ -122,14 +126,14 @@ while True:
     change = input('Выберите действие: ')
     if change == 'n':
         add_visit(visits)
-    elif change == 'r':
+    elif change == 'c':
         remove_visit(visits)
     elif change == 'h':
         calc_visit(visits)
     elif change == 'a':
         future_visit(visits)
-    elif change == 'w':
-        write_visit(visits)
+    elif change == 'r':
+        read_visit(visits)
     elif change == 's':
         save_visit(visits)
     elif change == 'e':
