@@ -4,8 +4,8 @@ SHENGEN = 180
 def menu():
     print('--------------------------')
     print('n - добавить новый визит')
-    print('c - удалить визит')
-    print('h - расчитать отдых')
+    print('d - удалить визит')
+    print('c - расчитать отдых')
     print('a - запланировать поездку')
     print('r - прочитать список визитов из файла')
     print('s - сохранить список визитов в файл')
@@ -113,10 +113,26 @@ def save_visit(vis):
             v.write('{} '.format(visit[0]))
             v.write('{}\n'.format(visit[1]))
 
+#функция выхода:
+def exit_function(x):
+    print('Bye bye!')
+    raise SystemExit
+
+
 print('Здравствуйте! Давайте расчитаем ваш отдых в ЕС')
 print('Шенгенская виза - {} дней'.format(SHENGEN))
 residence_limit = int(input('Введите максимальную длительность визы: '))
-visits = [] #список визитов
+visits = [] #инициализация списка визитов
+
+function_tab = {
+    'n' : add_visit,
+    'd' : remove_visit,
+    'c' : calc_visit,
+    'a' : future_visit,
+    'r' : read_visit,
+    's' : save_visit,
+    'e' : exit_function
+}
 
 while True:
     if len(visits) != 0:
@@ -124,18 +140,6 @@ while True:
         print('Список визитов - {}'.format(visits))
     menu()
     change = input('Выберите действие: ')
-    if change == 'n':
-        add_visit(visits)
-    elif change == 'c':
-        remove_visit(visits)
-    elif change == 'h':
-        calc_visit(visits)
-    elif change == 'a':
-        future_visit(visits)
-    elif change == 'r':
-        read_visit(visits)
-    elif change == 's':
-        save_visit(visits)
-    elif change == 'e':
-        print('Bye bye!')
-        raise SystemExit(1)
+    if change not in function_tab:
+        continue
+    function_tab[change](visits)
