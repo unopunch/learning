@@ -28,6 +28,9 @@ def audit_days(day1,day2,vis):
     elif day1 > SHENGEN or day2 > SHENGEN:
         print('Сроки визита не должны превышать срока Шенгенской визы!')
         return False
+    elif day1 > residence_limit or day2 > residence_limit:
+        print('Сроки визита не должны превышать срока визы!')
+        return False
     elif len(vis) != 0 and day1 < vis[-1][1]:
         print('Сроки визитов не должны пересекаться!')
         return False
