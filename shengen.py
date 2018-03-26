@@ -1,3 +1,4 @@
+import yaml
 SHENGEN = 180
 
 #меню
@@ -106,29 +107,23 @@ def future_visit(vis):
             print('Вам нужно будет выехать в {} день'.format(future + (residence_limit - all_days(vis)[-1])))
 
 #создание списка визитов из файла
-def read_visit(vis):
+def read_visit(x):
     try:
-        with open ('visits.txt', 'r') as v:
-            for line in v:
-                i = line.split()
-                i[0] = int(i[0])
-                i[1] = int(i[1])
-                vis.append(i)
+        with open ('visits.yaml', 'r') as v:
+            global visits
+            visits = yaml.load(v)
     except:
         pass
 
 #сохранение списка визитов в файл
 def save_visit(vis):
-    with open('visits.txt', 'w') as v:
-        for visit in vis:
-            v.write('{} '.format(visit[0]))
-            v.write('{}\n'.format(visit[1]))
+    with open('visits.yaml', 'w') as v:
+        v.write(yaml.dump(vis))
 
 #функция выхода:
 def exit_function(x):
     print('Bye bye!')
     raise SystemExit
-
 
 print('Здравствуйте! Давайте расчитаем ваш отдых в ЕС')
 print('Шенгенская виза - {} дней'.format(SHENGEN))
