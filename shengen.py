@@ -1,4 +1,4 @@
-import yaml
+import xml.etree.ElementTree as ET
 SHENGEN = 180
 
 #меню
@@ -108,17 +108,27 @@ def future_visit(vis):
 
 #создание списка визитов из файла
 def read_visit(x):
+    global visits
     try:
-        with open ('visits.yaml', 'r') as v:
-            global visits
-            visits = yaml.load(v)
+        tree = ET.parse('visits.xml')
+        root = tree.getroot()
+        visits.clear
+        for element in root:
+            visits.append([int(element.attrib['arrive']),int(element.attrib['departed'])])
+        print(visits)
     except:
+        print('Неправильный файл визитов! Или его нет.')
         pass
 
 #сохранение списка визитов в файл
 def save_visit(vis):
-    with open('visits.yaml', 'w') as v:
-        v.write(yaml.dump(vis))
+    root = ET.Element('list_visits')
+    for visit in vis:
+        a = ET.SubElement(root, 'visit')
+        a.set('arrive', str(visit[0]))
+        a.set('departed', str(visit[1]))
+    with open('visits.xml', 'w') as v:
+        v.write(ET.tostring(root).decode())
 
 #функция выхода:
 def exit_function(x):
