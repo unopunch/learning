@@ -4,7 +4,8 @@ SHENGEN = 180
 #меню
 def menu():
     print('--------------------------')
-    print('p - показать список визитов')
+    print('Список визитов: {} '.format(visits))
+    print('--------------------------')
     print('n - добавить новый визит')
     print('d - удалить визит')
     print('c - расчитать отдых')
@@ -13,6 +14,7 @@ def menu():
     print('s - сохранить список визитов в файл')
     print('e - выход')
     print('--------------------------')
+    return input('Выберите действие: ')
 
 #показать визиты
 def print_visit(vis):
@@ -72,7 +74,7 @@ def all_days(vis):
 def limit_visits(vis):
     for day, visit in zip(all_days(vis),vis):
         if residence_limit < day:
-            print('Вы превысили лимит пребывания на {} дней в поездку {}!'.format(day - residence_limit,visit))
+            print('Вы превысили лимит пребывания на {} дней в поездку {}!'.format(day - residence_limit, visit))
             return False
     return True
 
@@ -107,17 +109,15 @@ def future_visit(vis):
             print('Вам нужно будет выехать в {} день'.format(future + (residence_limit - all_days(vis)[-1])))
 
 #создание списка визитов из файла
-def read_visit(x):
-    global visits
+def read_visit(vis):
     try:
         tree = ET.parse('visits.xml')
         root = tree.getroot()
-        visits.clear
+        vis.clear
         for element in root:
-            visits.append([int(element.attrib['arrive']),int(element.attrib['departed'])])
-        print(visits)
+            vis.append([int(element.attrib['arrive']),int(element.attrib['departed'])])
     except:
-        print('Неправильный файл визитов! Или его нет.')
+        print('Неправильный файл визитов! Или его нет. :(')
         pass
 
 #сохранение списка визитов в файл
@@ -152,8 +152,4 @@ function_tab = {
 }
 
 while True:
-    menu()
-    change = input('Выберите действие: ')
-    if change not in function_tab:
-        continue
-    function_tab[change](visits)
+    function_tab[menu()](visits)
