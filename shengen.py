@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as etree
 SHENGEN = 180
 
 #меню
@@ -111,7 +111,7 @@ def future_visit(vis):
 #создание списка визитов из файла
 def read_visit(vis):
     try:
-        tree = ET.parse('visits.xml')
+        tree = etree.parse('visits.xml')
         root = tree.getroot()
         vis.clear
         for element in root:
@@ -122,13 +122,14 @@ def read_visit(vis):
 
 #сохранение списка визитов в файл
 def save_visit(vis):
-    root = ET.Element('list_visits')
+    root = etree.Element('list_visits')
     for visit in vis:
-        a = ET.SubElement(root, 'visit')
+        a = etree.SubElement(root, 'visit')
         a.set('arrive', str(visit[0]))
         a.set('departed', str(visit[1]))
     with open('visits.xml', 'w') as v:
-        v.write(ET.tostring(root).decode())
+        data = etree.tostring(root, pretty_print=True)
+        v.write(data.decode())
 
 #функция выхода:
 def exit_function(x):
